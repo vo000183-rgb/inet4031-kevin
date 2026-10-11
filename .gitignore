@@ -6,3 +6,6 @@ week-5/terraform.tfvars
 week-5/*.tfstate
 week-5/*.tfstate.*
 week-5/.terraform/
+
+# Local Week 4 database backup; do not commit
+week-5/week4-db-backup.sql
