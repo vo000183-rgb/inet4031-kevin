@@ -101,7 +101,7 @@ helm upgrade --install prometheus prometheus-community/prometheus \
   --create-namespace \
   --values week-6/prometheus-values.yaml \
   --wait \
-  --rollback-on-failure \
+  --atomic \
   --timeout 5m
 
 echo "$NEW" > "$STATE"
