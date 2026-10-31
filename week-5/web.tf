@@ -1,28 +1,28 @@
 resource "kubernetes_deployment_v1" "web" {
   metadata {
-    name = "web"
-    labels = {
-      app = "web"
-    }
+    name   = "web"
+    labels = { app = "web" }
   }
 
   spec {
     replicas = 1
 
     selector {
-      match_labels = {
-        app = "web"
-      }
+      match_labels = { app = "web" }
     }
 
     template {
       metadata {
-        labels = {
-          app = "web"
-        }
+        labels = { app = "web" }
       }
 
       spec {
+        security_context {
+          run_as_non_root = true
+          run_as_user     = "10001"
+          run_as_group    = "10001"
+        }
+
         container {
           name              = "web"
           image             = "docker.io/library/week-4-web:latest"
@@ -30,6 +30,25 @@ resource "kubernetes_deployment_v1" "web" {
 
           port {
             container_port = 5000
+          }
+
+          security_context {
+            allow_privilege_escalation = false
+
+            capabilities {
+              drop = ["ALL"]
+            }
+          }
+
+          resources {
+            requests = {
+              cpu    = "50m"
+              memory = "64Mi"
+            }
+            limits = {
+              cpu    = "500m"
+              memory = "256Mi"
+            }
           }
 
           env_from {
@@ -62,24 +81,20 @@ resource "kubernetes_deployment_v1" "web" {
 
           readiness_probe {
             exec {
-              command = [
-                "python",
-                "-c",
-                "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/')"
-              ]
+              command = ["python", "-c", "import urllib.request; urllib.request.urlopen('http://localhost:5000')"]
             }
 
-            initial_delay_seconds = 10
-            period_seconds        = 5
+            initial_delay_seconds = 5
+            period_seconds        = 10
+            timeout_seconds       = 5
           }
         }
       }
     }
   }
 
-  depends_on = [
-    kubernetes_deployment_v1.db
-  ]
+  # web does not reference anything from the db Deployment, so state the order explicitly.
+  depends_on = [kubernetes_deployment_v1.db]
 }
 
 resource "kubernetes_service_v1" "web" {
@@ -88,15 +103,11 @@ resource "kubernetes_service_v1" "web" {
   }
 
   spec {
-    selector = {
-      app = "web"
-    }
+    selector = { app = "web" }
 
     port {
       port        = 8080
       target_port = 5000
     }
-
-    type = "ClusterIP"
   }
 }
