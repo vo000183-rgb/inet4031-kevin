@@ -126,3 +126,12 @@ trivy config \
 ```
 
 This checked my infrastructure configuration while excluding local state files and sensitive variable files.
+
+
+## Application Changes
+
+For this capstone, I decided to keep my existing Flask incident tracker instead of adding new features. Since I'm doing the Cybersecurity and Governance track, I want to focus more on checking the security of my application and finding areas that could be improved.
+
+Based on my first scans, there are already some vulnerabilities and configuration issues that I can look into. I plan to review those findings and make security improvements while keeping the application working the same way.
+
+I'm also keeping the five original success criteria, so I won't be replacing any of them.
