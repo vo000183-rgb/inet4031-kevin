@@ -1,0 +1,9 @@
+Control ID,Control,Status,Evidence,Notes
+C01,Image vulnerability scanning,Needs improvement,evidence/trivy-image-baseline.txt,I ran Trivy on my Docker image and found 292 vulnerabilities that I still need to review.
+C02,Infrastructure configuration scanning,Needs improvement,evidence/checkov-report.txt,Checkov found 65 passed checks and 24 failed checks that I need to look into.
+C03,Git history secrets scanning,Passed,evidence/gitleaks-report.json,I scanned 38 commits with Gitleaks and no leaked secrets were found.
+C04,Trivy configuration scanning,Needs review,evidence/trivy-config-baseline.txt,Trivy found no misconfigurations but some variable values were missing during the scan.
+C05,Kubernetes cluster health,Verified,evidence/environment-checkpoint.txt,I checked my Kubernetes node and confirmed that my application pods were running.
+C06,Application health endpoint,Verified,evidence/environment-checkpoint.txt,I checked my Flask application and confirmed that the health endpoint was responding.
+C07,NetworkPolicy configuration,Needs testing,evidence/environment-checkpoint.txt,I confirmed that a NetworkPolicy exists but still need to test whether it blocks unwanted connections.
+C08,RBAC permissions,Not tested yet,evidence/rbac-checks.txt,I still need to check what permissions different users have in Kubernetes.
